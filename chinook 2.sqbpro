@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="chinook 2.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="3287"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="MusicVideo" custom_title="0" dock_id="3" table="4,10:mainMusicVideo"/><dock_state state="000000ff00000000fd000000010000000200000464000003dafc0100000003fb000000160064006f0063006b00420072006f00770073006500310100000000000004640000000000000000fb000000160064006f0063006b00420072006f00770073006500320100000000ffffffff0000000000000000fb000000160064006f0063006b00420072006f00770073006500330100000000ffffffff0000010100ffffff000002940000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">DELETE FROM MusicVideo;
+
+CREATE TABLE IF NOT EXISTS MusicVideo(TrackId INTEGER PRIMARY KEY,
+videodirector TEXT NOT NULL, FOREIGN KEY (TrackId) REFERENCES tracks(TrackId));
+
+INSERT INTO MusicVideo(TrackId, videodirector) VALUES
+(1,'Marc Webb'),
+(2, 'Jonas Akerlund'),
+(3, 'Marty Callner'),
+(4, 'Jonathan Glazer'),
+(5,  'Hype Williams'),
+(6, 'Florida Sigismondi'),
+(7,'Spike Jonze'),
+(8,'Dave Meyers'),
+(9,'Nabil Elderkin'),
+(10,'Romain Gavras');
+
+INSERT INTO MusicVideo (TrackId, videodirector)
+SELECT TrackId, 'A Director'
+FROM tracks
+WHERE Name  =  'Voodoo';
+
+SELECT *
+FROM tracks
+WHERE Name LIKE '%á%'
+   OR Name LIKE '%é%'
+   OR Name LIKE '%í%'
+   OR Name LIKE '%ó%'
+   OR Name LIKE '%ú%';
+   
+--creates a table where it shows tracks that have music videos
+SELECT t.Name, mv.videodirector
+FROM tracks t
+JOIN MusicVideo mv ON t.TrackId = mv.TrackId;
+
+--counts the amount of videos are in each genre
+SELECT  g.Name AS GenreName, COUNT(t.TrackId) AS NumTracksWithVideos
+FROM tracks t
+JOIN MusicVideo mv ON t.TrackId = mv.TrackId
+JOIN genres g ON t.GenreId = g.GenreId
+GROUP BY g.name;
+ 
+ 
+ --bonus query 7
+ 
+ SELECT c.FirstName || ' ' || c.LastName AS CustomerName,
+ COUNT(t.TrackId) AS LongTracks
+ FROM customers c
+ JOIN invoices i ON c.CustomerId = i.CustomerId
+ JOIN invoice_items ii ON i.InvoiceId = ii.InvoiceId
+ JOIN tracks t ON ii.TrackId = t.TrackId
+ WHERE t.Milliseconds &gt; (SELECT AVG(Milliseconds) FROM tracks)
+AND t.Milliseconds &lt;= 15 * 60 * 1000
+GROUP BY c.CustomerId
+ 
+ 
+ 
+
+
+
+
+
+
+
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
