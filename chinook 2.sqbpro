@@ -56,7 +56,7 @@ GROUP BY c.CustomerId
  
  
 
-
+-- maybe this would be easier to look at?
 
 
 
